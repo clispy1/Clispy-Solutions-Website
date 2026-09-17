@@ -21,6 +21,7 @@ export default function Page() {
   
   const [formStatus, setFormStatus] = useState('Send Project Inquiry');
   const [faqOpen, setFaqOpen] = useState(-1);
+  const [brokenThumbs, setBrokenThumbs] = useState<Set<number>>(new Set());
 
   // Nav Scroll
   useEffect(() => {
@@ -76,13 +77,41 @@ export default function Page() {
     };
   }, []); // Run once on mount
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormStatus('✓ Sent! We\'ll be in touch within 24 hours.');
-    setTimeout(() => {
-      setFormStatus('Send Project Inquiry');
-      (e.target as HTMLFormElement).reset();
-    }, 4000);
+    const form = e.currentTarget;
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+
+    if (!accessKey) {
+      console.error('NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is not set — form cannot send.');
+      setFormStatus('⚠ Form not configured — email us directly');
+      setTimeout(() => setFormStatus('Send Project Inquiry'), 4000);
+      return;
+    }
+
+    setFormStatus('Sending...');
+    const formData = new FormData(form);
+    formData.append('access_key', accessKey);
+    formData.append('subject', 'New Project Inquiry — Clispy Solutions');
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await res.json();
+      if (result.success) {
+        setFormStatus('✓ Sent! We\'ll be in touch within 24 hours.');
+        form.reset();
+      } else {
+        throw new Error(result.message || 'Submission failed');
+      }
+    } catch (err) {
+      console.error('Contact form submission failed:', err);
+      setFormStatus('⚠ Failed to send — try WhatsApp instead');
+    } finally {
+      setTimeout(() => setFormStatus('Send Project Inquiry'), 4000);
+    }
   };
 
   const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -399,7 +428,17 @@ export default function Page() {
                 key={idx} 
                 className={`project-card reveal ${delayClass}`} 
                 style={{ opacity: isVisible ? '1' : '.2', pointerEvents: isVisible ? 'auto' : 'none' }}>
-                <div className="project-bg" style={{backgroundImage:`url('${bgImages[idx]}')`, backgroundSize:'cover', backgroundPosition:'center top'}}></div>
+                <div className={`project-bg proj-bg-${(idx % 5) + 1}`}>
+                  {!brokenThumbs.has(idx) && (
+                    <img
+                      src={bgImages[idx]}
+                      alt={`${project.name} website preview`}
+                      loading="lazy"
+                      style={{width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top'}}
+                      onError={() => setBrokenThumbs(prev => new Set(prev).add(idx))}
+                    />
+                  )}
+                </div>
                 <div className="project-overlay">
                   <span className="project-tag">{project.tag}</span>
                   <div className="project-name">{project.name}</div>
@@ -608,16 +647,17 @@ export default function Page() {
         <div>
           <form className="contact-form reveal" onSubmit={handleFormSubmit}>
             <div className="form-row">
-              <div className="form-group"><label>Full Name *</label><input type="text" placeholder="Your name" required /></div>
-              <div className="form-group"><label>Email *</label><input type="email" placeholder="your@email.com" required /></div>
+              <div className="form-group"><label>Full Name *</label><input type="text" name="name" placeholder="Your name" required /></div>
+              <div className="form-group"><label>Email *</label><input type="email" name="email" placeholder="your@email.com" required /></div>
             </div>
             <div className="form-row">
-              <div className="form-group"><label>Phone</label><input type="tel" placeholder="+233 ..." /></div>
-              <div className="form-group"><label>Budget</label><select><option>Select budget range</option><option>Under ¢4,000</option><option>¢4,000 – ¢8,000</option><option>¢8,000+</option></select></div>
+              <div className="form-group"><label>Phone</label><input type="tel" name="phone" placeholder="+233 ..." /></div>
+              <div className="form-group"><label>Budget</label><select name="budget"><option>Select budget range</option><option>Under ¢4,000</option><option>¢4,000 – ¢8,000</option><option>¢8,000+</option></select></div>
             </div>
-            <div className="form-group"><label>Project Type *</label><select required><option value="">Select project type</option><option>Web Design & Development</option><option>E-commerce Development</option><option>Digital Marketing & Ads</option><option>Website Audit (Free)</option><option>Other</option></select></div>
-            <div className="form-group"><label>Project Details *</label><textarea placeholder="Tell us about your project, goals, and timeline..." required></textarea></div>
-            <button type="submit" className="btn-submit" id="submit-btn" style={{background: formStatus.includes('Sent') ? 'oklch(0.65 0.15 140)' : ''}}>
+            <div className="form-group"><label>Project Type *</label><select name="project_type" required><option value="">Select project type</option><option>Web Design & Development</option><option>E-commerce Development</option><option>Digital Marketing & Ads</option><option>Website Audit (Free)</option><option>Other</option></select></div>
+            <div className="form-group"><label>Project Details *</label><textarea name="message" placeholder="Tell us about your project, goals, and timeline..." required></textarea></div>
+            <input type="text" name="botcheck" style={{display: 'none'}} tabIndex={-1} autoComplete="off" />
+            <button type="submit" className="btn-submit" id="submit-btn" disabled={formStatus === 'Sending...'} style={{background: formStatus.includes('Sent') ? 'oklch(0.65 0.15 140)' : formStatus.includes('⚠') ? 'oklch(0.6 0.2 30)' : ''}}>
               <span id="submit-text">{formStatus}</span>
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
