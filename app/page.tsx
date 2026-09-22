@@ -1,9 +1,17 @@
 'use client';
 import { useState, useEffect, useRef, Fragment } from 'react';
+import { motion } from 'motion/react';
 import ThreeCanvas from '../components/ThreeCanvas';
 import Cursor from '../components/Cursor';
 import TweaksPanel from '../components/TweaksPanel';
 import { caseStudies } from '../lib/data';
+
+const reveal = (delay = 0) => ({
+  initial: { opacity: 0, y: 32 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] as const },
+});
 
 // Component mapping of the original HTML logic to React hooks
 export default function Page() {
@@ -22,6 +30,14 @@ export default function Page() {
   const [formStatus, setFormStatus] = useState('Send Project Inquiry');
   const [faqOpen, setFaqOpen] = useState(-1);
   const [brokenThumbs, setBrokenThumbs] = useState<Set<number>>(new Set());
+  const [photoBroken, setPhotoBroken] = useState(false);
+  const photoRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (photoRef.current && photoRef.current.complete && photoRef.current.naturalWidth === 0) {
+      setPhotoBroken(true);
+    }
+  }, []);
 
   // Nav Scroll
   useEffect(() => {
@@ -226,18 +242,51 @@ export default function Page() {
         </div>
       </div>
 
+      {/* PROBLEM */}
+      <section id="problem">
+        <div className="problem-grid">
+          <motion.div className="problem-card" {...reveal()}>
+            <div className="problem-card-title">Your website is costing you customers if:</div>
+            <ul className="problem-list">
+              <li><span className="problem-x">✕</span>Visitors leave before they see what you offer</li>
+              <li><span className="problem-x">✕</span>It looks unprofessional on the phone — where most of your customers actually are</li>
+              <li><span className="problem-x">✕</span>You&rsquo;re still closing sales through DMs and WhatsApp screenshots</li>
+            </ul>
+          </motion.div>
+          <motion.div className="problem-text" {...reveal(0.15)}>
+            <div className="section-label">The Problem</div>
+            <h2 className="problem-headline">
+              YOUR WEBSITE HAS <span style={{color:'var(--yellow)'}}>ONE JOB</span>: TURN VISITORS INTO <span style={{color:'var(--yellow)'}}>CUSTOMERS.</span> MOST DON&rsquo;T.
+            </h2>
+            <p className="problem-sub">A slow, outdated, or DM-only setup quietly costs you sales every single day. We build sites — and the systems behind them — that are actually built to convert.</p>
+            <div className="problem-icons">
+              <motion.div className="problem-icon-item" {...reveal(0.2)}><span>🐢</span>Slow Load Times</motion.div>
+              <motion.div className="problem-icon-item" {...reveal(0.28)}><span>📵</span>Broken on Mobile</motion.div>
+              <motion.div className="problem-icon-item" {...reveal(0.36)}><span>🤷</span>Unclear Offer</motion.div>
+              <motion.div className="problem-icon-item" {...reveal(0.44)}><span>💬</span>Stuck in DMs</motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ABOUT */}
       <section id="about">
         <div className="about-visual reveal">
           <div className="about-card" style={{ paddingBottom: '48px' }}>
-            <img 
-              src="/jake.jpeg" 
-              alt="Jake Asare" 
-              className="absolute inset-0 w-full h-full object-cover z-0" 
-            />
+            {photoBroken ? (
+              <div className="about-card-photo-fallback absolute inset-0 z-0">JA</div>
+            ) : (
+              <img
+                ref={photoRef}
+                src="/jake.jpeg"
+                alt="Jake Asare"
+                className="absolute inset-0 w-full h-full object-cover z-0"
+                onError={() => setPhotoBroken(true)}
+              />
+            )}
             {/* Dark gradient overlay so the text is readable over the photo */}
             <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent"></div>
-            
+
             <div className="about-card-name z-10 text-white">Jake Asare (Clispy)</div>
             <div className="about-card-role z-10">Founder & Creative Director</div>
           </div>
@@ -252,11 +301,16 @@ export default function Page() {
         </div>
         <div className="about-text">
           <div className="section-label reveal">Our Story</div>
-          <h2 className="section-title reveal reveal-delay-1">Built to Look<br/><span style={{color:'var(--accent)'}}>Credible.</span><br/>Designed to Convert.</h2>
+          <h2 className="section-title reveal reveal-delay-1">Built to Look<br/><span style={{color:'var(--yellow)'}}>Credible.</span><br/>Designed to Convert.</h2>
           <p className="about-desc reveal reveal-delay-2">I'm Jake Clispy — a Ghanaian web designer, developer, and digital marketer with 3+ years helping startups, side hustlers, and businesses launch strong online. I run Clispy Solutions with my small team, obsessed with building things that look good, work fast, and get real results.</p>
           <p className="about-desc reveal reveal-delay-3">From Electrical Engineering to the digital world — we help local and international businesses stop running on DMs and start running serious online operations.</p>
           <div className="about-tags reveal reveal-delay-4">
             <span className="tag">Web Design</span><span className="tag">Development</span><span className="tag">E-commerce</span><span className="tag">Digital Ads</span><span className="tag">WordPress</span><span className="tag">React & Next.js</span>
+          </div>
+          <div className="about-proof">
+            <motion.div className="about-proof-item" {...reveal()}><div className="about-proof-num">30+</div><div className="about-proof-label">Projects Delivered</div></motion.div>
+            <motion.div className="about-proof-item" {...reveal(0.08)}><div className="about-proof-num">25+</div><div className="about-proof-label">Happy Clients</div></motion.div>
+            <motion.div className="about-proof-item" {...reveal(0.16)}><div className="about-proof-num">3+</div><div className="about-proof-label">Years Experience</div></motion.div>
           </div>
         </div>
       </section>
@@ -266,7 +320,7 @@ export default function Page() {
         <div className="process-header reveal">
           <div>
             <div className="section-label">How We Work</div>
-            <h2 className="section-title">From Idea to<br/><span style={{color:'var(--accent)'}}>Live & Growing</span></h2>
+            <h2 className="section-title">From Idea to<br/><span style={{color:'var(--yellow)'}}>Live & Growing</span></h2>
           </div>
           <p className="section-sub" style={{maxWidth:'320px'}}>A clear process means no surprises, no delays, and a site you're proud to show off.</p>
         </div>
@@ -304,7 +358,7 @@ export default function Page() {
         <div className="services-header reveal">
           <div>
             <div className="section-label">What We Do</div>
-            <h2 className="section-title">Services That<br/><span style={{color:'var(--accent)'}}>Drive Results</span></h2>
+            <h2 className="section-title">Services That<br/><span style={{color:'var(--yellow)'}}>Drive Results</span></h2>
           </div>
           <p className="section-sub" style={{maxWidth:'340px'}}>Every project starts with strategy and ends with results you can measure. No fluff, no wasted time.</p>
         </div>
@@ -343,7 +397,7 @@ export default function Page() {
       <section id="packages">
         <div className="packages-header">
           <div className="section-label reveal">Transparent Pricing</div>
-          <h2 className="section-title reveal reveal-delay-1">Simple Packages,<br/><span style={{color:'var(--accent)'}}>Clear Value</span></h2>
+          <h2 className="section-title reveal reveal-delay-1">Simple Packages,<br/><span style={{color:'var(--yellow)'}}>Clear Value</span></h2>
           <p className="section-sub reveal reveal-delay-2">No hidden fees. No surprises. Pick a package or reach out for a custom quote.</p>
         </div>
         <div className="packages-grid">
@@ -403,7 +457,7 @@ export default function Page() {
       <section id="projects" style={{background:'oklch(0.10 0.014 280 / 0.65)', backdropFilter:'blur(2px)'}}>
         <div className="projects-header">
           <div className="section-label reveal">Featured Work</div>
-          <h2 className="section-title reveal reveal-delay-1">Projects That<br/><span style={{color:'var(--accent)'}}>Deliver.</span></h2>
+          <h2 className="section-title reveal reveal-delay-1">Projects That<br/><span style={{color:'var(--yellow)'}}>Deliver.</span></h2>
           <div className="projects-filter reveal reveal-delay-2">
             <button className={`filter-btn ${projectFilter === 'all' ? 'active' : ''}`} onClick={() => setProjectFilter('all')}>All</button>
             <button className={`filter-btn ${projectFilter === 'web' ? 'active' : ''}`} onClick={() => setProjectFilter('web')}>Web</button>
@@ -481,7 +535,7 @@ export default function Page() {
       <section id="testimonials" style={{background:'oklch(0.07 0.012 280 / 0.5)'}}>
         <div style={{marginBottom:'60px'}}>
           <div className="section-label reveal">Testimonials</div>
-          <h2 className="section-title reveal reveal-delay-1">What Clients<br/><span style={{color:'var(--accent)'}}>Actually Say</span></h2>
+          <h2 className="section-title reveal reveal-delay-1">What Clients<br/><span style={{color:'var(--yellow)'}}>Actually Say</span></h2>
         </div>
         
         <div className="testimonial-carousel-wrapper reveal reveal-delay-2">
@@ -561,7 +615,7 @@ export default function Page() {
         <div className="faq-header">
           <div>
             <div className="section-label reveal">FAQ</div>
-            <h2 className="section-title reveal reveal-delay-1">Questions We<br/><span style={{color:'var(--accent)'}}>Always Get</span></h2>
+            <h2 className="section-title reveal reveal-delay-1">Questions We<br/><span style={{color:'var(--yellow)'}}>Always Get</span></h2>
           </div>
           <p className="section-sub reveal reveal-delay-2" style={{maxWidth:'300px'}}>Everything you need to know before reaching out.</p>
         </div>
@@ -606,7 +660,7 @@ export default function Page() {
         <div className="blog-header">
           <div>
             <div className="section-label reveal">Insights</div>
-            <h2 className="section-title reveal reveal-delay-1">Tips for Growing<br/><span style={{color:'var(--accent)'}}>Online in Ghana</span></h2>
+            <h2 className="section-title reveal reveal-delay-1">Tips for Growing<br/><span style={{color:'var(--yellow)'}}>Online in Ghana</span></h2>
           </div>
           <p className="section-sub reveal reveal-delay-2" style={{maxWidth:'300px'}}>Practical advice for business owners ready to take their online presence seriously.</p>
         </div>
@@ -645,7 +699,7 @@ export default function Page() {
       <section id="contact" style={{background:'oklch(0.10 0.014 280 / 0.65)', backdropFilter:'blur(2px)'}}>
         <div className="contact-info">
           <div className="section-label reveal">Contact</div>
-          <h2 className="section-title reveal reveal-delay-1">Let's Build<br/><span style={{color:'var(--accent)'}}>Something Real.</span></h2>
+          <h2 className="section-title reveal reveal-delay-1">Let's Build<br/><span style={{color:'var(--yellow)'}}>Something Real.</span></h2>
           <p className="contact-desc reveal reveal-delay-2">Have a project? A vision? Or just tired of running your business through DMs? Fill out the form and we'll get back to you within 24 hours.</p>
           <div className="contact-items reveal reveal-delay-3">
             <div className="contact-item"><div className="contact-icon">✉</div><div><div className="contact-item-label">Email</div><div className="contact-item-value"><a href="mailto:jake@clispysolutions.com">jake@clispysolutions.com</a></div></div></div>
