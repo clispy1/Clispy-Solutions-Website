@@ -248,9 +248,9 @@ export default function Page() {
           <motion.div className="problem-card" {...reveal()}>
             <div className="problem-card-title">Your website is costing you customers if:</div>
             <ul className="problem-list">
-              <li><span className="problem-x">✕</span>Visitors leave before they see what you offer</li>
-              <li><span className="problem-x">✕</span>It looks unprofessional on the phone — where most of your customers actually are</li>
-              <li><span className="problem-x">✕</span>You&rsquo;re still closing sales through DMs and WhatsApp screenshots</li>
+              <li><span className="problem-x">✕</span>Visitors bounce before they see what you offer</li>
+              <li><span className="problem-x">✕</span>It looks unprofessional on mobile</li>
+              <li><span className="problem-x">✕</span>You&rsquo;re still closing sales through DMs</li>
             </ul>
           </motion.div>
           <motion.div className="problem-text" {...reveal(0.15)}>
@@ -258,7 +258,6 @@ export default function Page() {
             <h2 className="problem-headline">
               YOUR WEBSITE HAS <span style={{color:'var(--yellow)'}}>ONE JOB</span>: TURN VISITORS INTO <span style={{color:'var(--yellow)'}}>CUSTOMERS.</span> MOST DON&rsquo;T.
             </h2>
-            <p className="problem-sub">A slow, outdated, or DM-only setup quietly costs you sales every single day. We build sites — and the systems behind them — that are actually built to convert.</p>
             <div className="problem-icons">
               <motion.div className="problem-icon-item" {...reveal(0.2)}><span>🐢</span>Slow Load Times</motion.div>
               <motion.div className="problem-icon-item" {...reveal(0.28)}><span>📵</span>Broken on Mobile</motion.div>
@@ -302,8 +301,7 @@ export default function Page() {
         <div className="about-text">
           <div className="section-label reveal">Our Story</div>
           <h2 className="section-title reveal reveal-delay-1">Built to Look<br/><span style={{color:'var(--yellow)'}}>Credible.</span><br/>Designed to Convert.</h2>
-          <p className="about-desc reveal reveal-delay-2">I'm Jake Clispy — a Ghanaian web designer, developer, and digital marketer with 3+ years helping startups, side hustlers, and businesses launch strong online. I run Clispy Solutions with my small team, obsessed with building things that look good, work fast, and get real results.</p>
-          <p className="about-desc reveal reveal-delay-3">From Electrical Engineering to the digital world — we help local and international businesses stop running on DMs and start running serious online operations.</p>
+          <p className="about-desc reveal reveal-delay-2">I&rsquo;m Jake — a Ghanaian web designer and developer helping businesses stop running on DMs and start running serious online operations.</p>
           <div className="about-tags reveal reveal-delay-4">
             <span className="tag">Web Design</span><span className="tag">Development</span><span className="tag">E-commerce</span><span className="tag">Digital Ads</span><span className="tag">WordPress</span><span className="tag">React & Next.js</span>
           </div>

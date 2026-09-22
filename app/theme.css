@@ -110,8 +110,7 @@ section { padding:120px 80px; }
 .problem-list { list-style:none; display:flex; flex-direction:column; gap:16px; }
 .problem-list li { display:flex; align-items:flex-start; gap:12px; font-size:.92rem; line-height:1.5; color:oklch(0.98 0.005 90/.95); background:oklch(0.99 0.005 90/.08); border-radius:14px; padding:14px 16px; }
 .problem-x { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:oklch(0.62 0.24 25); color:#fff; font-size:.7rem; display:flex; align-items:center; justify-content:center; margin-top:1px; }
-.problem-headline { font-family:var(--font-syne),sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; letter-spacing:-.02em; line-height:1.2; text-transform:uppercase; color:#1c1c1c; margin-bottom:20px; }
-.problem-sub { color:#4a4a4a; line-height:1.7; max-width:480px; margin-bottom:32px; }
+.problem-headline { font-family:var(--font-syne),sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:800; letter-spacing:-.02em; line-height:1.2; text-transform:uppercase; color:#1c1c1c; margin-bottom:32px; }
 .problem-icons { display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:420px; }
 .problem-icon-item { display:flex; align-items:center; gap:10px; font-size:.85rem; font-weight:600; color:#2a2a2a; background:oklch(0.93 0.01 90); border-radius:12px; padding:12px 14px; }
 .problem-icon-item span { font-size:1.1rem; }
