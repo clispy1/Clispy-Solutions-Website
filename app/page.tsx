@@ -167,6 +167,9 @@ export default function Page() {
       {/* HERO */}
       <section id="hero">
         <ThreeCanvas speedMult={speedMult} geomType={geomType} />
+        <div className="hero-deco" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div className="hero-content">
           <div className="hero-eyebrow">Est. 2022 · Accra, Ghana 🇬🇭</div>
           <h1 className="hero-title">
@@ -187,16 +190,22 @@ export default function Page() {
             </a>
           </div>
         </div>
-        <div className="hero-stats">
-          <div className="hero-stat"><div className="hero-stat-num">30<span style={{fontSize:'1.4rem'}}>+</span></div><div className="hero-stat-label">Projects</div></div>
-          <div className="hero-stat"><div className="hero-stat-num">25<span style={{fontSize:'1.4rem'}}>+</span></div><div className="hero-stat-label">Clients</div></div>
-          <div className="hero-stat"><div className="hero-stat-num">3<span style={{fontSize:'1.4rem'}}>+</span></div><div className="hero-stat-label">Years</div></div>
-          <div className="hero-stat"><div className="hero-stat-num">100<span style={{fontSize:'1.4rem'}}>%</span></div><div className="hero-stat-label">Satisfaction</div></div>
+        <div className="hero-testimonial-card">
+          <div className="hero-testimonial-stars">★★★★★</div>
+          <p className="hero-testimonial-quote">&ldquo;Clispy Solutions transformed our platform completely — increased our lead generation by 150%.&rdquo;</p>
+          <div className="hero-testimonial-person">
+            <div className="hero-testimonial-avatar">DK</div>
+            <div>
+              <div className="hero-testimonial-name">Dennis K.</div>
+              <div className="hero-testimonial-role">Marketing Director, Denayo Properties</div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* MARQUEE */}
       <div className="marquee-section">
+        <div className="marquee-label">We&apos;ve Delivered Results For</div>
         <div className="marquee-track">
           {[...Array(2)].map((_, idx) => (
              <Fragment key={idx}>
