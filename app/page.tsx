@@ -728,6 +728,29 @@ export default function Page() {
         </div>
       </section>
 
+      {/* FINAL CTA */}
+      <section id="final-cta">
+        <motion.div className="final-cta-content" {...reveal()}>
+          <div className="section-label" style={{justifyContent:'center'}}>Let&rsquo;s Talk</div>
+          <h2 className="final-cta-headline">Ready to Turn Visitors Into <span style={{color:'var(--yellow)'}}>Customers?</span></h2>
+          <p className="final-cta-sub">No contracts. No retainers. Just a website built to convert — and a team that answers.</p>
+          <a href="#contact" className="btn-primary">Start Your Project</a>
+        </motion.div>
+        <div className="filmstrip" aria-hidden="true">
+          <div className="filmstrip-track">
+            {[...Array(2)].map((_, idx) => (
+              <Fragment key={idx}>
+                {caseStudies.map((project, i) => (
+                  <div key={i} className={`filmstrip-tile proj-bg-${(i % 5) + 1}`}>
+                    <span>{project.name}</span>
+                  </div>
+                ))}
+              </Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <footer>
         <div className="footer-top">
