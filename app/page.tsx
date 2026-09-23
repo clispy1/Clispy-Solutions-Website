@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, Fragment } from 'react';
 import { motion } from 'motion/react';
+import { Instagram, Facebook, Github, Linkedin, MessageCircle } from 'lucide-react';
 import ThreeCanvas from '../components/ThreeCanvas';
 import Cursor from '../components/Cursor';
 import TweaksPanel from '../components/TweaksPanel';
@@ -238,6 +239,38 @@ export default function Page() {
         </div>
       </section>
 
+      {/* PROBLEM */}
+      <section id="problem">
+        <div className="problem-grid">
+          <motion.div className="problem-card" {...reveal()}>
+            <div className="problem-card-title">Your website is costing you customers if:</div>
+            <ul className="problem-list">
+              <li><span className="problem-x">✕</span>Visitors bounce before they see what you offer</li>
+              <li><span className="problem-x">✕</span>It looks unprofessional on mobile</li>
+              <li><span className="problem-x">✕</span>You&rsquo;re still closing sales through DMs</li>
+            </ul>
+          </motion.div>
+          <motion.div className="problem-text" {...reveal(0.15)}>
+            <div className="section-label">The Problem</div>
+            <div className="problem-deco-zone" aria-hidden="true">
+              <div className="problem-wordmark">Clispy<span>.</span></div>
+              <div className="problem-social-float problem-social-1"><Instagram size={16} /></div>
+              <div className="problem-social-float problem-social-2"><Facebook size={16} /></div>
+              <div className="problem-social-float problem-social-3"><MessageCircle size={16} /></div>
+            </div>
+            <h2 className="problem-headline">
+              YOUR WEBSITE HAS <span style={{color:'var(--highlight)'}}>ONE JOB</span>: TURN VISITORS INTO <span style={{color:'var(--accent2)'}}>CUSTOMERS.</span> MOST DON&rsquo;T.
+            </h2>
+            <div className="problem-icons">
+              <motion.div className="problem-icon-item" {...reveal(0.2)}><span>🐢</span>Slow Load Times</motion.div>
+              <motion.div className="problem-icon-item" {...reveal(0.28)}><span>📵</span>Broken on Mobile</motion.div>
+              <motion.div className="problem-icon-item" {...reveal(0.36)}><span>🤷</span>Unclear Offer</motion.div>
+              <motion.div className="problem-icon-item" {...reveal(0.44)}><span>💬</span>Stuck in DMs</motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* MARQUEE */}
       <div className="marquee-section">
         <div className="marquee-label">We&apos;ve Delivered Results For</div>
@@ -261,31 +294,13 @@ export default function Page() {
         </div>
       </div>
 
-      {/* PROBLEM */}
-      <section id="problem">
-        <div className="problem-grid">
-          <motion.div className="problem-card" {...reveal()}>
-            <div className="problem-card-title">Your website is costing you customers if:</div>
-            <ul className="problem-list">
-              <li><span className="problem-x">✕</span>Visitors bounce before they see what you offer</li>
-              <li><span className="problem-x">✕</span>It looks unprofessional on mobile</li>
-              <li><span className="problem-x">✕</span>You&rsquo;re still closing sales through DMs</li>
-            </ul>
-          </motion.div>
-          <motion.div className="problem-text" {...reveal(0.15)}>
-            <div className="section-label">The Problem</div>
-            <h2 className="problem-headline">
-              YOUR WEBSITE HAS <span style={{color:'var(--highlight)'}}>ONE JOB</span>: TURN VISITORS INTO <span style={{color:'var(--highlight)'}}>CUSTOMERS.</span> MOST DON&rsquo;T.
-            </h2>
-            <div className="problem-icons">
-              <motion.div className="problem-icon-item" {...reveal(0.2)}><span>🐢</span>Slow Load Times</motion.div>
-              <motion.div className="problem-icon-item" {...reveal(0.28)}><span>📵</span>Broken on Mobile</motion.div>
-              <motion.div className="problem-icon-item" {...reveal(0.36)}><span>🤷</span>Unclear Offer</motion.div>
-              <motion.div className="problem-icon-item" {...reveal(0.44)}><span>💬</span>Stuck in DMs</motion.div>
-            </div>
-          </motion.div>
+      {/* BUILT WITH — honest stand-in for a "featured in" press band: real tools, not fake logos */}
+      <div className="built-with">
+        <div className="built-with-label">Built With Tools You Can Trust</div>
+        <div className="built-with-row">
+          <span>WordPress</span><span>WooCommerce</span><span>Next.js</span><span>React</span><span>Tailwind CSS</span>
         </div>
-      </section>
+      </div>
 
       {/* ABOUT */}
       <section id="about">
@@ -316,11 +331,28 @@ export default function Page() {
             <span className="badge-icon">🌍</span>
             <div><div className="badge-label">Global Reach</div><div className="badge-sub">Africa · UAE · Beyond</div></div>
           </div>
+          <div className="about-social-pill">
+            <a href="https://github.com/clispy1" target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={16} /></a>
+            <a href="https://instagram.com/jake_clispy" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={16} /></a>
+            <a href="https://linkedin.com/company/jerome-asare" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={16} /></a>
+          </div>
         </div>
         <div className="about-text">
           <div className="section-label reveal">Our Story</div>
           <h2 className="section-title reveal reveal-delay-1">Built to Look<br/><span style={{color:'var(--highlight)'}}>Credible.</span><br/>Designed to Convert.</h2>
           <p className="about-desc reveal reveal-delay-2">I&rsquo;m Jake — a Ghanaian web designer and developer helping businesses stop running on DMs and start running serious online operations.</p>
+          <div className="about-bar-row">
+            <div className="about-bar-label"><span>Client Satisfaction</span><span>100%</span></div>
+            <div className="about-bar-track">
+              <motion.div
+                className="about-bar-fill"
+                initial={{ width: 0 }}
+                whileInView={{ width: '100%' }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 1.1, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+              />
+            </div>
+          </div>
           <div className="about-tags reveal reveal-delay-4">
             <span className="tag">Web Design</span><span className="tag">Development</span><span className="tag">E-commerce</span><span className="tag">Digital Ads</span><span className="tag">WordPress</span><span className="tag">React & Next.js</span>
           </div>
@@ -745,13 +777,30 @@ export default function Page() {
         </div>
       </section>
 
+      {/* PRE-CTA STATEMENT — repeats the About tagline in large type, the
+          same "bold black restatement before the final band" beat the
+          reference uses, without inventing new copy */}
+      <section id="pre-cta">
+        <motion.h2 className="pre-cta-statement" {...reveal()}>
+          Built to Look <span style={{color:'var(--highlight)'}}>Credible.</span> Designed to Convert.
+        </motion.h2>
+      </section>
+
       {/* FINAL CTA */}
       <section id="final-cta">
         <motion.div className="final-cta-content" {...reveal()}>
           <div className="section-label" style={{justifyContent:'center'}}>Let&rsquo;s Talk</div>
           <h2 className="final-cta-headline">Ready to Turn Visitors Into <span style={{color:'var(--highlight)'}}>Customers?</span></h2>
-          <p className="final-cta-sub">No contracts. No retainers. Just a website built to convert — and a team that answers.</p>
           <a href="#contact" className="btn-primary">Start Your Project</a>
+          <div className="final-cta-bullets">
+            <span>No contracts →</span>
+            <span>No retainers →</span>
+            <span>A team that answers →</span>
+          </div>
+          <div className="final-cta-quote">
+            <span className="final-cta-quote-stars">★★★★★</span>
+            &ldquo;Jake was time-conscious, transparent, and made everything smooth and stress-free.&rdquo; — Kwame Osei
+          </div>
         </motion.div>
         <div className="filmstrip" aria-hidden="true">
           <div className="filmstrip-track">
