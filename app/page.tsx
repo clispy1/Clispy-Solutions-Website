@@ -33,6 +33,20 @@ export default function Page() {
   const [photoBroken, setPhotoBroken] = useState(false);
   const photoRef = useRef<HTMLImageElement>(null);
 
+  // Inline script in layout.tsx already set this on <html> before paint, so
+  // reading it back here (instead of defaulting to 'dark') keeps state in
+  // sync with what's already on screen.
+  const [theme, setTheme] = useState<'dark' | 'light'>(() =>
+    typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'
+  );
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch {}
+  };
+
   useEffect(() => {
     if (photoRef.current && photoRef.current.complete && photoRef.current.naturalWidth === 0) {
       setPhotoBroken(true);
@@ -164,10 +178,15 @@ export default function Page() {
           <li><a href="#projects">Work</a></li>
           <li><a href="#faq">FAQ</a></li>
         </ul>
-        <button className="nav-cta" onClick={() => document.getElementById('contact')?.scrollIntoView({behavior: 'smooth'})}>Get Free Quote</button>
-        <button className={`hamburger ${menuOpen ? 'open' : ''}`} onClick={() => { setMenuOpen(!menuOpen); document.body.style.overflow = !menuOpen ? 'hidden' : ''; }} aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
+        <div className="nav-actions">
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle light/dark mode">
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
+          <button className="nav-cta" onClick={() => document.getElementById('contact')?.scrollIntoView({behavior: 'smooth'})}>Get Free Quote</button>
+          <button className={`hamburger ${menuOpen ? 'open' : ''}`} onClick={() => { setMenuOpen(!menuOpen); document.body.style.overflow = !menuOpen ? 'hidden' : ''; }} aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
       </nav>
 
       <div id="mobile-menu" className={menuOpen ? 'open' : ''}>
@@ -256,7 +275,7 @@ export default function Page() {
           <motion.div className="problem-text" {...reveal(0.15)}>
             <div className="section-label">The Problem</div>
             <h2 className="problem-headline">
-              YOUR WEBSITE HAS <span style={{color:'var(--yellow)'}}>ONE JOB</span>: TURN VISITORS INTO <span style={{color:'var(--yellow)'}}>CUSTOMERS.</span> MOST DON&rsquo;T.
+              YOUR WEBSITE HAS <span style={{color:'var(--highlight)'}}>ONE JOB</span>: TURN VISITORS INTO <span style={{color:'var(--highlight)'}}>CUSTOMERS.</span> MOST DON&rsquo;T.
             </h2>
             <div className="problem-icons">
               <motion.div className="problem-icon-item" {...reveal(0.2)}><span>🐢</span>Slow Load Times</motion.div>
@@ -300,7 +319,7 @@ export default function Page() {
         </div>
         <div className="about-text">
           <div className="section-label reveal">Our Story</div>
-          <h2 className="section-title reveal reveal-delay-1">Built to Look<br/><span style={{color:'var(--yellow)'}}>Credible.</span><br/>Designed to Convert.</h2>
+          <h2 className="section-title reveal reveal-delay-1">Built to Look<br/><span style={{color:'var(--highlight)'}}>Credible.</span><br/>Designed to Convert.</h2>
           <p className="about-desc reveal reveal-delay-2">I&rsquo;m Jake — a Ghanaian web designer and developer helping businesses stop running on DMs and start running serious online operations.</p>
           <div className="about-tags reveal reveal-delay-4">
             <span className="tag">Web Design</span><span className="tag">Development</span><span className="tag">E-commerce</span><span className="tag">Digital Ads</span><span className="tag">WordPress</span><span className="tag">React & Next.js</span>
@@ -318,7 +337,7 @@ export default function Page() {
         <div className="process-header reveal">
           <div>
             <div className="section-label">How We Work</div>
-            <h2 className="section-title">From Idea to<br/><span style={{color:'var(--yellow)'}}>Live & Growing</span></h2>
+            <h2 className="section-title">From Idea to<br/><span style={{color:'var(--highlight)'}}>Live & Growing</span></h2>
           </div>
           <p className="section-sub" style={{maxWidth:'320px'}}>A clear process means no surprises, no delays, and a site you're proud to show off.</p>
         </div>
@@ -352,11 +371,11 @@ export default function Page() {
       </section>
 
       {/* SERVICES */}
-      <section id="services" style={{background:'oklch(0.10 0.014 280 / 0.65)', backdropFilter:'blur(2px)'}}>
+      <section id="services" style={{background:'var(--bg2)', backdropFilter:'blur(2px)'}}>
         <div className="services-header reveal">
           <div>
             <div className="section-label">What We Do</div>
-            <h2 className="section-title">Services That<br/><span style={{color:'var(--yellow)'}}>Drive Results</span></h2>
+            <h2 className="section-title">Services That<br/><span style={{color:'var(--highlight)'}}>Drive Results</span></h2>
           </div>
           <p className="section-sub" style={{maxWidth:'340px'}}>Every project starts with strategy and ends with results you can measure. No fluff, no wasted time.</p>
         </div>
@@ -395,7 +414,7 @@ export default function Page() {
       <section id="packages">
         <div className="packages-header">
           <div className="section-label reveal">Transparent Pricing</div>
-          <h2 className="section-title reveal reveal-delay-1">Simple Packages,<br/><span style={{color:'var(--yellow)'}}>Clear Value</span></h2>
+          <h2 className="section-title reveal reveal-delay-1">Simple Packages,<br/><span style={{color:'var(--highlight)'}}>Clear Value</span></h2>
           <p className="section-sub reveal reveal-delay-2">No hidden fees. No surprises. Pick a package or reach out for a custom quote.</p>
         </div>
         <div className="packages-grid">
@@ -452,10 +471,10 @@ export default function Page() {
       </section>
 
       {/* PROJECTS */}
-      <section id="projects" style={{background:'oklch(0.10 0.014 280 / 0.65)', backdropFilter:'blur(2px)'}}>
+      <section id="projects" style={{background:'var(--bg2)', backdropFilter:'blur(2px)'}}>
         <div className="projects-header">
           <div className="section-label reveal">Featured Work</div>
-          <h2 className="section-title reveal reveal-delay-1">Projects That<br/><span style={{color:'var(--yellow)'}}>Deliver.</span></h2>
+          <h2 className="section-title reveal reveal-delay-1">Projects That<br/><span style={{color:'var(--highlight)'}}>Deliver.</span></h2>
           <div className="projects-filter reveal reveal-delay-2">
             <button className={`filter-btn ${projectFilter === 'all' ? 'active' : ''}`} onClick={() => setProjectFilter('all')}>All</button>
             <button className={`filter-btn ${projectFilter === 'web' ? 'active' : ''}`} onClick={() => setProjectFilter('web')}>Web</button>
@@ -530,10 +549,10 @@ export default function Page() {
       </div>
 
       {/* TESTIMONIALS */}
-      <section id="testimonials" style={{background:'oklch(0.07 0.012 280 / 0.5)'}}>
+      <section id="testimonials" style={{background:'var(--bg2)'}}>
         <div style={{marginBottom:'60px'}}>
           <div className="section-label reveal">Testimonials</div>
-          <h2 className="section-title reveal reveal-delay-1">What Clients<br/><span style={{color:'var(--yellow)'}}>Actually Say</span></h2>
+          <h2 className="section-title reveal reveal-delay-1">What Clients<br/><span style={{color:'var(--highlight)'}}>Actually Say</span></h2>
         </div>
         
         <div className="testimonial-carousel-wrapper reveal reveal-delay-2">
@@ -609,11 +628,11 @@ export default function Page() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" style={{background:'oklch(0.10 0.014 280 / 0.65)', backdropFilter:'blur(2px)'}}>
+      <section id="faq" style={{background:'var(--bg2)', backdropFilter:'blur(2px)'}}>
         <div className="faq-header">
           <div>
             <div className="section-label reveal">FAQ</div>
-            <h2 className="section-title reveal reveal-delay-1">Questions We<br/><span style={{color:'var(--yellow)'}}>Always Get</span></h2>
+            <h2 className="section-title reveal reveal-delay-1">Questions We<br/><span style={{color:'var(--highlight)'}}>Always Get</span></h2>
           </div>
           <p className="section-sub reveal reveal-delay-2" style={{maxWidth:'300px'}}>Everything you need to know before reaching out.</p>
         </div>
@@ -654,11 +673,11 @@ export default function Page() {
       </div>
 
       {/* BLOG */}
-      <section id="blog" style={{background:'oklch(0.10 0.014 280 / 0.65)', backdropFilter:'blur(2px)'}}>
+      <section id="blog" style={{background:'var(--bg2)', backdropFilter:'blur(2px)'}}>
         <div className="blog-header">
           <div>
             <div className="section-label reveal">Insights</div>
-            <h2 className="section-title reveal reveal-delay-1">Tips for Growing<br/><span style={{color:'var(--yellow)'}}>Online in Ghana</span></h2>
+            <h2 className="section-title reveal reveal-delay-1">Tips for Growing<br/><span style={{color:'var(--highlight)'}}>Online in Ghana</span></h2>
           </div>
           <p className="section-sub reveal reveal-delay-2" style={{maxWidth:'300px'}}>Practical advice for business owners ready to take their online presence seriously.</p>
         </div>
@@ -694,10 +713,10 @@ export default function Page() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" style={{background:'oklch(0.10 0.014 280 / 0.65)', backdropFilter:'blur(2px)'}}>
+      <section id="contact" style={{background:'var(--bg2)', backdropFilter:'blur(2px)'}}>
         <div className="contact-info">
           <div className="section-label reveal">Contact</div>
-          <h2 className="section-title reveal reveal-delay-1">Let's Build<br/><span style={{color:'var(--yellow)'}}>Something Real.</span></h2>
+          <h2 className="section-title reveal reveal-delay-1">Let's Build<br/><span style={{color:'var(--highlight)'}}>Something Real.</span></h2>
           <p className="contact-desc reveal reveal-delay-2">Have a project? A vision? Or just tired of running your business through DMs? Fill out the form and we'll get back to you within 24 hours.</p>
           <div className="contact-items reveal reveal-delay-3">
             <div className="contact-item"><div className="contact-icon">✉</div><div><div className="contact-item-label">Email</div><div className="contact-item-value"><a href="mailto:jake@clispysolutions.com">jake@clispysolutions.com</a></div></div></div>
@@ -730,7 +749,7 @@ export default function Page() {
       <section id="final-cta">
         <motion.div className="final-cta-content" {...reveal()}>
           <div className="section-label" style={{justifyContent:'center'}}>Let&rsquo;s Talk</div>
-          <h2 className="final-cta-headline">Ready to Turn Visitors Into <span style={{color:'var(--yellow)'}}>Customers?</span></h2>
+          <h2 className="final-cta-headline">Ready to Turn Visitors Into <span style={{color:'var(--highlight)'}}>Customers?</span></h2>
           <p className="final-cta-sub">No contracts. No retainers. Just a website built to convert — and a team that answers.</p>
           <a href="#contact" className="btn-primary">Start Your Project</a>
         </motion.div>
